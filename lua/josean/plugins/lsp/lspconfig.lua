@@ -55,7 +55,12 @@ return {
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
 
         opts.desc = "Restart LSP"
-        vim.keymap.set("n", "<leader>rs", "<cmd>LspRestart<CR>", opts)
+        vim.keymap.set("n", "<leader>rs", function()
+          for _, client in ipairs(vim.lsp.get_clients({ bufnr = ev.buf })) do
+            client:stop(true)
+          end
+          vim.cmd("edit")
+        end, opts)
       end,
     })
 
