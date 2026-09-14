@@ -24,13 +24,26 @@ keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffe 
 
 keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
 
-keymap.set("n", "<leader>tt", "<cmd>botright split | term<CR>", { desc = "Open terminal below" })
-keymap.set("n", "<leader>tv", "<cmd>botright vsplit | term<CR>", { desc = "Open terminal on the right" })
+local function side_width()
+  return math.max(80, math.floor(vim.o.columns * 0.28))
+end
+
+keymap.set("n", "<leader>tt", function()
+  vim.cmd("botright split | term")
+  vim.cmd("resize 12")
+  vim.cmd("startinsert")
+end, { desc = "Open terminal below" })
+
+keymap.set("n", "<leader>tv", function()
+  vim.cmd("botright vsplit | term")
+  vim.cmd("vertical resize " .. side_width())
+  vim.cmd("startinsert")
+end, { desc = "Open terminal on the right" })
 
 keymap.set("n", "<leader>tw", function()
   vim.cmd("only")
   vim.cmd("botright vsplit | term")
-  vim.cmd("vertical resize 80")
+  vim.cmd("vertical resize " .. side_width())
   vim.cmd("wincmd h")
   vim.cmd("split | term")
   vim.cmd("resize 10")
