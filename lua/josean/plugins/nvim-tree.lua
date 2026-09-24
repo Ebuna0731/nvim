@@ -37,6 +37,9 @@ return {
           },
         },
       },
+      hijack_directories = {
+        enable = false,
+      },
       filters = {
         custom = { ".DS_Store" },
       },
@@ -52,5 +55,21 @@ return {
     keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle file explorer on current file" }) -- toggle file explorer on current file
     keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
     keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
+
+    vim.api.nvim_create_autocmd("VimEnter", {
+      group = vim.api.nvim_create_augroup("josean-tree-on-dir", { clear = true }),
+      callback = function(data)
+        if vim.fn.isdirectory(data.file) ~= 1 then
+          return
+        end
+        vim.cmd.cd(data.file)
+        vim.cmd.enew()
+        vim.api.nvim_buf_delete(data.buf, { force = true })
+        vim.schedule(function()
+          require("nvim-tree.api").tree.open()
+          vim.cmd("wincmd l")
+        end)
+      end,
+    })
   end,
 }

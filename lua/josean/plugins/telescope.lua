@@ -12,8 +12,7 @@
 
     telescope.setup({
       defaults = {
-        path_display = { "smart" },
-        mappings = {
+        path_display = { "smart" }, mappings = {
           i = {
             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
             ["<C-j>"] = actions.move_selection_next, -- move to next result
@@ -34,3 +33,4 @@
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
   end,
 }
+
